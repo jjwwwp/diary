@@ -29,19 +29,20 @@
 %>
 
 <%	
+	
 	//출력 리스트
 	int currentPage = 1;
 	if(request.getParameter("currentPage") != null){
 		currentPage = Integer.parseInt(request.getParameter("currentPage"));
 	}
-	int rowPerPage = 10;
+	int rowPerPage = 5; //페이지당 출력되는 글 개수
 	/* 
 	if(request.getParameter("currentPage") != null){
 		currentPage = Integer.parseInt(request.getParameter("rowPerPage"));
 	} */
 	int startRow = (currentPage-1)*rowPerPage; // 1-0,2-10,3-20,4-30...
 	
-	
+	//페이징
 	String searchWord = ""; //null이 될수없음
 	if(request.getParameter("searchWord") != null){
 		searchWord = request.getParameter("searchWord");
@@ -56,7 +57,7 @@
 	PreparedStatement stmt2 = null;
 	ResultSet rs2 = null;
 	stmt2 = conn.prepareStatement(sql2);
-	stmt2.setString(1,"%"+searchWord);
+	stmt2.setString(1,"%"+searchWord+"%");
 	stmt2.setInt(2,startRow);
 	stmt2.setInt(3,rowPerPage);
 	rs2 = stmt2.executeQuery();
@@ -101,6 +102,7 @@
 	 table{
 	 	border:1px solid #FFD6FD;
 		border-radius:5px;
+		text-align: center;
 	 }	
 		
 </style>
@@ -111,8 +113,9 @@
 		<div class="row">
 			<div class="col"></div>
 			<div class="mt-5 col-7 bg-white border shadow p-3 mb-5 bg-body-tertiary rounded">
-				<h1 class="text-center">일기 목록</h1>
-					<table border="1">
+				<h1 class="text-center">목록</h1>
+				
+					<table>
 						<tr>
 							<th>날짜</th>
 							<th>제목</th>
@@ -121,22 +124,65 @@
 							while(rs2.next()){
 						%>
 							<tr>
-								<td><a href=""><%=rs2.getString("diaryDate")%></a></td>
-								<td><%=rs2.getString("title")%></td>
+								<td><a href='/diary/diaryOne.jsp?diaryDate=<%=rs2.getString("diaryDate")%>'></a>
+									<%=rs2.getString("title")%></td>
 							</tr>
 						<%
 							}
 						%>	
 					</table>
+				
+	<nav aria-label="Page navigation example">
+  	<ul class="pagination justify-content-center">
+  	
+	<%
+		if(currentPage > 1){
+	%>
+		<li class="page-item">
+			<a class ="page-link" href="./diaryList.jsp?currentPage=1"> << </a>
+		</li>
+		<li class="page-item">
+			<a class ="page-link" href="./diaryList.jsp?currentPage=<%=currentPage-1%>&searchWord=<%=searchWord%>">이전</a>
+		</li>
+	<%		
+		} else{
+	%>
+		<li class="page-item disabled">
+			<a class ="page-link" href="./diaryList.jsp?currentPage=1"> << </a>
+		<li class="page-item disabled">
+			<a class ="page-link" href="./diaryList.jsp?currentPage=<%=currentPage-1%>">이전</a>
+		</li>
+	<%
+		}
+	%>
+		&nbsp;
 		<div>
-			<a href="">이전</a>
-			<a href="">다음</a>
-	 	</div>
-	 	
-	<form method="get" action="/diary/diaryList.jsp">
+			<span class="btn btn-outline-secondary">
+					<%=currentPage%> 
+			</span>
+		</div>
+		&nbsp;
+	<%		
+		
+		if(currentPage < lastPage) {
+	%>
+		<li class="page-item">
+			<a class ="page-link" href="./diaryList.jsp?currentPage=<%=currentPage+1%>">다음</a>
+		</li>
+		<li class="page-item">
+			<a class ="page-link" href="./diaryList.jsp?currentPage=<%=lastPage%>">>></a>
+		</li>
+		
+	<%		
+		}
+	%>
+	</ul>
+	</nav>
+		
+	<form method="get" action="./diaryList.jsp?searchWord=<%=request.getParameter(searchWord)%>">
 		<div>
 			제목검색:
-			<input type="text" name="searchWord">
+			<input type="text" name="searchWord" value="<%=searchWord%>">
 			<button type="submit">검색</button>
 		</div>
 	</form>

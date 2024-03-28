@@ -3,6 +3,7 @@
 <%@page import = "java.net.*"%>
 <%
 	String diaryDate = request.getParameter("diaryDate");
+	String feeling = request.getParameter("feeling");
 	String title = request.getParameter("title");
 	String weather = request.getParameter("weather");
 	String content = request.getParameter("content");
@@ -12,7 +13,7 @@
 	System.out.println(weather);
 	System.out.println(content);
 
-	String sql1 = "INSERT INTO `diary`.`diary` (`diary_date`, `title`, `weather`, `content`, `update_date`, `create_date`) VALUES (?, ?, ?, ?, NOW(), NOW())";
+	String sql1 = "INSERT INTO `diary`.`diary` (`diary_date`,`feeling`, `title`, `weather`, `content`, `update_date`, `create_date`) VALUES (?, ?, ?, ?, ?, NOW(), NOW())";
 	Class.forName("org.mariadb.jdbc.Driver");
 	Connection conn = null;
 	PreparedStatement stmt1 = null;
@@ -20,9 +21,10 @@
 	conn = DriverManager.getConnection("jdbc:mariadb://127.0.0.1:3306/diary", "root", "java1234");
 	stmt1 = conn.prepareStatement(sql1);
 	stmt1.setString(1,diaryDate);
-	stmt1.setString(2,title);
-	stmt1.setString(3,weather);
-	stmt1.setString(4,content);
+	stmt1.setString(2,feeling);
+	stmt1.setString(3,title);
+	stmt1.setString(4,weather);
+	stmt1.setString(5,content);
 	System.out.println(stmt1);
 	
   	 int row = stmt1.executeUpdate();

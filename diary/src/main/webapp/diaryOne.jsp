@@ -27,7 +27,7 @@
 	System.out.println(diaryDate +"<--diaryDate"); 
 	
 	
-	String sql2 = "select diary_date, title,weather,content,update_date,create_date from diary where diary_date=?";
+	String sql2 = "select diary_date, feeling,title,weather,content,update_date,create_date from diary where diary_date=?";
 	PreparedStatement stmt2 = null;
 	ResultSet rs2 = null;
 
@@ -85,6 +85,10 @@
 				<tr>
 					<td>날짜:</td>
 					<td><%=rs2.getString("diary_date")%></td>
+				</tr>
+				<tr>
+					<td>기분:</td>
+					<td><%=rs2.getString("feeling")%></td>
 				</tr>
 				<tr>
 					<td>제목:</td>
