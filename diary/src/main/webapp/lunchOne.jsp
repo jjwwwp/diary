@@ -44,11 +44,13 @@
 	}
 
 	
-	String sql2 = "select * from lunch where lunch_date = ?";
+	String sql2 = "select lunch_date lunchDate, menu,create_date from lunch where lunch_date=?";
 	PreparedStatement stmt2 = null;
 	ResultSet rs2 = null;
 	stmt2 = conn.prepareStatement(sql2);
 	stmt2.setString(1,checkDate);
+	System.out.println(stmt2);
+	
 	rs2 = stmt2.executeQuery();
 %>
 <!DOCTYPE html>
@@ -76,8 +78,7 @@
 </head>
 <body class="bg-success-subtle">
 	<div class="container">
-		<div class="row">
-			<div class="col"></div>
+		<div class="row justify-content-center">
 				<div class="mt-5 col-7 bg-white border shadow p-3 mb-5 bg-body-tertiary rounded">
 					
 		<h1>점심투표</h1>
@@ -115,6 +116,56 @@
 				<input type="radio" name="menu" value="양식">양식
 				<input type="radio" name="menu" value="기타">기타
 			</div>		
-					
+			<button type="submit">투표</button>		
+			
+			<%
+				if(ck.equals("F")){
+					while(rs.next()){
+			%>
+				<div class="text-center">
+				날짜:
+				<input type="text" name="lunch" value=<%=rs2.getString("lunchDate")%>>
+				</div><br>
+				메뉴:
+			<%
+				if((rs2.getString("menu")).equals("한식")){
+			%>
+				<input type="radio" name="menu" value="한식" checked onclick="return false;">한식
+				<input type="radio" name="menu" value="양식" onclick="return false;">양식
+				<input type="radio" name="menu" value="일식" onclick="return false;">일식
+				<input type="radio" name="menu" value="중식" onclick="return false;">중식
+				<input type="radio" name="menu" value="기타" onclick="return false;">기타
+			<%
+				if((rs2.getString("menu")).equals("양식")){
+			%>
+				<input type="radio" name="menu" value="한식" onclick="return false;">한식
+				<input type="radio" name="menu" value="양식" checked onclick="return false;">양식
+				<input type="radio" name="menu" value="일식" onclick="return false;">일식
+				<input type="radio" name="menu" value="중식" onclick="return false;">중식
+				<input type="radio" name="menu" value="기타" onclick="return false;">기타
+			<%
+				if((rs2.getString("menu")).equals("일식")){
+			%>
+				<input type="radio" name="menu" value="한식" onclick="return false;">한식
+				<input type="radio" name="menu" value="양식" onclick="return false;">양식
+				<input type="radio" name="menu" value="일식" checked onclick="return false;">일식
+				<input type="radio" name="menu" value="중식" onclick="return false;">중식
+				<input type="radio" name="menu" value="기타" onclick="return false;">기타	
+			<%
+				if((rs2.getString("menu")).equals("중식")){
+			%>
+				<input type="radio" name="menu" value="한식" onclick="return false;">한식
+				<input type="radio" name="menu" value="양식" onclick="return false;">양식
+				<input type="radio" name="menu" value="일식" onclick="return false;">일식
+				<input type="radio" name="menu" value="중식" checked onclick="return false;">중식
+				<input type="radio" name="menu" value="기타" onclick="return false;">기타	
+			<%
+				}else{
+			%>
+				<input type="radio" name="menu" value="한식" onclick="return false;">한식
+				<input type="radio" name="menu" value="양식" onclick="return false;">양식
+				<input type="radio" name="menu" value="일식" onclick="return false;">일식
+				<input type="radio" name="menu" value="중식" onclick="return false;">중식
+				<input type="radio" name="menu" value="기타" checked onclick="return false;">기타	
 </body>
 </html>

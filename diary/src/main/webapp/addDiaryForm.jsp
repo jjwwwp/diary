@@ -57,8 +57,7 @@
 </head>
 <body class="bg-success-subtle">
 	<div class="container">
-		<div class="row">
-			<div class="col"></div>
+		<div class="row justify-content-center">
 				<div class="mt-5 col-7 bg-white border shadow p-3 mb-5 bg-body-tertiary rounded">
 	
 	<h1>일기쓰기</h1>

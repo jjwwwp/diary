@@ -112,6 +112,7 @@
 	 	border:1px solid #FFD6FD;
 		border-radius:5px;
 		text-align: center;
+		width:300px;
 	 }	
 		
 </style>
@@ -119,26 +120,30 @@
 
 <body class="bg-success-subtle">
 <div class="container">
-		<div class="row">
-			<div class="col"></div>
+		<div class="row justify-content-center">
 			<div class="mt-5 col-7 bg-white border shadow p-3 mb-5 bg-body-tertiary rounded">
 				<h1 class="text-center">목록</h1>
 				
-					<table>
-						<tr>
-							<th>날짜</th>
-							<th>제목</th>
-						</tr>
-						<%
-							while(rs2.next()){
-						%>
+					<table style="margin-left: auto; margin-right: auto;">
 							<tr>
-								<td><a href='/diary/diaryOne.jsp?diaryDate=<%=rs2.getString("diaryDate")%>'></a>
-									<%=rs2.getString("title")%></td>
+								<th>날짜</th>
+								<th>제목</th>
 							</tr>
-						<%
-							}
-						%>	
+							<%
+								while(rs2.next()){
+							%>
+								<tr>
+									<td><a href='/diary/diaryOne.jsp?diaryDate=<%=rs2.getString("diaryDate")%>'>
+										<%=rs2.getString("diaryDate")%>
+										</a>
+									</td>
+									<td><%=rs2.getString("title")%></td>
+									
+								</tr>
+							<%
+								}
+							%>	
+					
 					</table>
 				
 	<nav aria-label="Page navigation example">

@@ -17,46 +17,46 @@
 %>
 <%
 
-	Class.forName("org.mariadb.jdbc.Driver");
-	Connection conn = null;
-	conn = DriverManager.getConnection(
-			"jdbc:mariadb://127.0.0.1:3306/diary", "root", "java1234");
-	
-	// 달력 API
-	String targetYear = request.getParameter("targetYear");
-	String targetMonth = request.getParameter("targetMonth");
-	
-	Calendar target = Calendar.getInstance();
-	
-	if(targetYear != null && targetMonth != null) {
-		target.set(Calendar.YEAR, Integer.parseInt(targetYear));
-		target.set(Calendar.MONTH, Integer.parseInt(targetMonth)); 
-	}
-	
-	target.set(Calendar.DATE, 1);
-	
-	// 달력 타이틀로 출력할 변수
-	int tYear = target.get(Calendar.YEAR);
-	int tMonth = target.get(Calendar.MONTH);
-	
-	int yoNum = target.get(Calendar.DAY_OF_WEEK); // 일:1, 월:2, .....토:7
-	System.out.println(yoNum); 
-	// 시작공백의 개수 : 일요일 공백이 없고, 월요일은 1칸, 화요일은 2칸,....yoNum - 1이 공백의 개수
-	int startBlank = yoNum - 1;
-	int lastDate = target.getActualMaximum(Calendar.DATE); // target달의 마지막 날짜 반환
-	System.out.println(lastDate + " <-- lastDate");
-	int countDiv = startBlank + lastDate;
-	
-	// DB에서 tYear와 tMonth에 해당되는 diary목록 추출
-	String sql2 = "select diary_date diaryDate, day(diary_date) day, feeling, left(title,5) title from diary where year(diary_date)=? and month(diary_date)=?";
-	PreparedStatement stmt2 = null;
-	ResultSet rs2 = null;
-	stmt2 = conn.prepareStatement(sql2);
-	stmt2.setInt(1, tYear);
-	stmt2.setInt(2, tMonth+1);
-	System.out.println(stmt2);
-	
-	rs2 = stmt2.executeQuery();
+Class.forName("org.mariadb.jdbc.Driver");
+Connection conn = null;
+conn = DriverManager.getConnection(
+		"jdbc:mariadb://127.0.0.1:3306/diary", "root", "java1234");
+
+// 달력 API
+String targetYear = request.getParameter("targetYear");
+String targetMonth = request.getParameter("targetMonth");
+
+Calendar target = Calendar.getInstance();
+
+if(targetYear != null && targetMonth != null) {
+	target.set(Calendar.YEAR, Integer.parseInt(targetYear));
+	target.set(Calendar.MONTH, Integer.parseInt(targetMonth)); 
+}
+
+target.set(Calendar.DATE, 1);
+
+// 달력 타이틀로 출력할 변수
+int tYear = target.get(Calendar.YEAR);
+int tMonth = target.get(Calendar.MONTH);
+
+int yoNum = target.get(Calendar.DAY_OF_WEEK); // 일:1, 월:2, .....토:7
+System.out.println(yoNum); 
+// 시작공백의 개수 : 일요일 공백이 없고, 월요일은 1칸, 화요일은 2칸,....yoNum - 1이 공백의 개수
+int startBlank = yoNum - 1;
+int lastDate = target.getActualMaximum(Calendar.DATE); // target달의 마지막 날짜 반환
+System.out.println(lastDate + " <-- lastDate");
+int countDiv = startBlank + lastDate;
+
+// DB에서 tYear와 tMonth에 해당되는 diary목록 추출
+String sql2 = "select diary_date diaryDate, day(diary_date) day, feeling, left(title,5) title from diary where year(diary_date)=? and month(diary_date)=?";
+PreparedStatement stmt2 = null;
+ResultSet rs2 = null;
+stmt2 = conn.prepareStatement(sql2);
+stmt2.setInt(1, tYear);
+stmt2.setInt(2, tMonth+1);
+System.out.println(stmt2);
+
+rs2 = stmt2.executeQuery();
 	
 %>
 
@@ -114,12 +114,12 @@
 </head>
 <body class="bg-success-subtle">
 	<div class="container">
-		<div class="row">
-			<div class="col"></div>
+		<div class="row justify-content-center">
 				<div class="mt-5 col-7 bg-white border shadow p-3 mb-5 bg-body-tertiary rounded">
 				<div>
 					<a href="/diary/diary.jsp">다이어리/</a>
-					<a href="/diary/diaryList.jsp">게시판</a>
+					<a href="/diary/diaryList.jsp">게시판/</a>
+					<a href="/diary/lunchOne.jsp">점심</a>
 				</div>
 					<h1>일기장</h1>
 					
@@ -142,7 +142,6 @@
 	
 		<hr>
 		
-	
 	 	<div class="yo sun">SUN</div>
         <div class="yo">MON</div>
         <div class="yo">TUE</div>
@@ -195,13 +194,14 @@
 	<%
 		}
 	%>			
+		
 		</div>
 	<%
 		}
 	%>		
-	
+
 	</div>	
 </div>
-	
+	</div>
 </body>
 </html>

@@ -2,39 +2,22 @@
 <%@ page import = "java.sql.*" %>
 <%@ page import="java.net.*"%>
 <%
-	String sql1 = "select my_session mySession from login";
+	String diaryDate = request.getParameter("diaryDate");
+	
 	Class.forName("org.mariadb.jdbc.Driver");
 	Connection conn = null;
-	PreparedStatement stmt1 = null;
-	ResultSet rs1 = null;
-	conn = DriverManager.getConnection("jdbc:mariadb://127.0.0.1:3306/diary", "root", "java1234");
-	
-	stmt1 = conn.prepareStatement(sql1);
-	rs1 = stmt1.executeQuery();
-	
-	String mySession = null;
-	if(rs1.next());{
-		mySession = rs1.getString("mySession"); //rs1.getString(1): select from login 테이블로 부터 my_session값 불러옴	
-	}
-	if(mySession.equals("OFF")){
-		String errMsg = URLEncoder.encode("잘못된 접근입니다. 로그인 먼저 해주세요","utf-8");
-		response.sendRedirect("/diary/loginForm.jsp?errMsg="+errMsg);
-		return; //코드진행을 종료시키는 문법 ex) 메서드 끝낼때 return사용
-	}
-		
-
-	String diaryDate = request.getParameter("diaryDate");
-	System.out.println(diaryDate +"<--diaryDate"); 
+	conn = DriverManager.getConnection(
+		"jdbc:mariadb://127.0.0.1:3306/diary", "root", "java1234");
 	
 	
-	String sql2 = "select diary_date, feeling,title,weather,content,update_date,create_date from diary where diary_date=?";
-	PreparedStatement stmt2 = null;
-	ResultSet rs2 = null;
-
-	//쿼리
-	stmt2 = conn.prepareStatement(sql2);
-	stmt2.setString(1,diaryDate);
-	rs2 = stmt2.executeQuery();
+	
+	System.out.println(diaryDate+"<-diaryDate");
+	String sql="select * from diary WHERE diary_date = ?";
+	
+	PreparedStatement stmt = conn.prepareStatement(sql);
+	stmt.setString(1,diaryDate);
+	System.out.println(stmt);
+	ResultSet rs= stmt.executeQuery(); 	
 %>
 <!DOCTYPE html>
 <html>
@@ -78,29 +61,29 @@
 		<h1>내용</h1>
 	
 	<%
-		if(rs2.next()){
+		if(rs.next()){
 	%>
 		<div style="display: flex; justify-content: center;">
 			<table class="table">
 				<tr>
 					<td>날짜:</td>
-					<td><%=rs2.getString("diary_date")%></td>
+					<td><%=rs.getString("diary_date")%></td>
 				</tr>
 				<tr>
 					<td>기분:</td>
-					<td><%=rs2.getString("feeling")%></td>
+					<td><%=rs.getString("feeling")%></td>
 				</tr>
 				<tr>
 					<td>제목:</td>
-					<td><%=rs2.getString("title")%></td>
+					<td><%=rs.getString("title")%></td>
 				</tr>
 				<tr>
 					<td>날씨:</td>
-					<td><%=rs2.getString("weather")%></td>
+					<td><%=rs.getString("weather")%></td>
 				</tr>
 				<tr>
 					<td>내용:</td>
-					<td><%=rs2.getString("content")%></td>
+					<td><%=rs.getString("content")%></td>
 				</tr>
 			</table>
 		</div>
@@ -116,6 +99,42 @@
 				<button type="submit" class="btn btn-outline-primary">삭제</button>
 			</a>
 		</div>
+	
+	
+	<!-- 댓글 추가 폼 -->
+	<div>
+		<form method="post" action="/diary/addCommentAction.jsp">
+			<input type="hidden" name="diaryDate" value="<%=diaryDate%>">
+			<textarea rows="2" cols="50" name="memo"></textarea>
+			<button type="submit">댓글입력</button>
+		</form>	
+	</div>
+	
+	<!-- 댓글 리스트 -->
+	<%
+		
+		String sql2 = "select comment_no commentNo,memo,create_date createDate from comment where diary_date=?";
+		PreparedStatement stmt2 = null;
+		ResultSet rs2 = null;
+		
+		stmt2 = conn.prepareStatement(sql2);
+		stmt2.setString(1,diaryDate);
+		rs2 = stmt2.executeQuery();
+	%>
+	
+	<table style="margin-left: auto; margin-right: auto;">
+		<%
+			while(rs2.next()){
+		%>
+			<tr>
+				<td><%=rs2.getString("memo")%></td>
+				<td><%=rs2.getString("createDate")%></td>
+				<td><a href='/diary/deleteComment.jsp?commentNo=<%=rs2.getString("commentNo")%>'>삭제</a></td>
+			</tr>
+		<%
+			}
+		%>
+	</table>
 	</div>
 </body>
 </html>

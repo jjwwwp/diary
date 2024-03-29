@@ -25,7 +25,27 @@
 		return; // 코드 진행을 끝내는 문법 ex) 메서드 끝낼때 return사용
 	}
 	
-	String lunchDate =
+	String lunchDate = request.getParameter("lunchDate");
+	String menu = request.getParameter("menu");
+	
+	System.out.println(lunchDate);
+	System.out.println(menu);
+	
+	String sql2 = "insert into lunch(lunch_date,menu,create_date,update_date)VALUES(?,?,now(),now())";
+	PreparedStatement stmt2 = null;
+	ResultSet rs2 = null;
+	stmt2 = conn.prepareStatement(sql2);
+	stmt2.setString(1,lunchDate);
+	stmt2.setString(2,menu);
+	System.out.println(stmt2);
+	
+	int row = stmt2.executeUpdate();
+	if(row==1){
+		System.out.println("입력성공");
+	}else{
+		System.out.println("입력실패");
+	}
+	response.sendRedirect("/diary/diary.jsp");
 %>
 <!DOCTYPE html>
 <html>

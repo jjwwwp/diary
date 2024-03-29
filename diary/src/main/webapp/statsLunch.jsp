@@ -93,6 +93,23 @@
 			%>
 		</tr>
 	</table>
-
+		<div>
+			<table>
+				<tr>
+					<td>날짜</td>
+					<td>메뉴</td>
+				</tr>
+				<%
+					while(rs2.next()){
+				%>
+					<tr>
+						<td><%=rs2.getString("lunchDate")%></td>
+						<td><%=rs2.getString("menu") %></td>
+					</tr>
+				<%
+					}
+				%>	
+			</table>
+		</div>
 </body>
 </html>
