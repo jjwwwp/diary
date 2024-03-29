@@ -1,8 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import = "java.sql.*" %>
-<%@page import="java.net.*"%>
 <%
-	//0.로그인(인증) 분기
+	/* //0.로그인(인증) 분기
 	//diary(db이름).login(테이블이름).mysession db설정 => 'ON' => redirect("diary.jsp")
 	String sql1 = "select my_session mySession from login";
 	Class.forName("org.mariadb.jdbc.Driver");
@@ -21,10 +19,22 @@
 		//자원반납
 		
 		return; //코드진행을 종료시키는 문법 ex) 메서드 끝낼때 return사용
+	} */
+	
+	//0-1 로그인(인증)분기 session사용으로 변경
+	//로그인 성공시 세션에 loginMember라는 변수를 만들고 값으로 로그인 아이디를 저장
+	String loginMember = (String)(session.getAttribute("loginMember"));
+	//사용되는 sessionAPI
+	//session.getAttribute():변수이름으로 변수값을 반환하는 메서드
+	//session.getAttribute()는 찾는 변수가 없으면 null값을 반환한다
+	//null이면 로그아웃상태이고, null이 아니면 로그인 상태
+	System.out.println(loginMember+"<--loginMember");
+	
+	//loginForm페이지는 로그아웃 상태에서만 출력되는 페이지
+	if(loginMember != null){
+		response.sendRedirect("/diary/diary.jsp");
+		return;
 	}
-	rs1.close();
-	stmt1.close();
-	conn.close();
 	
 	//1.요청값 분석
 	String errMsg = request.getParameter("errMsg");

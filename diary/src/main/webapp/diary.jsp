@@ -4,62 +4,59 @@
 <%@ page import = "java.util.*" %>
 <%
 	//로그인(인증) 분기
-	//diary(db이름).login(테이블이름).mysession db설정 => 'OFF' => redirect("loginForm.jsp")
 	
-	String sql1 = "select my_session mySession from login";
-	Class.forName("org.mariadb.jdbc.Driver");
-	Connection conn = null;
-	PreparedStatement stmt1 = null;
-	ResultSet rs1 = null;
-	conn = DriverManager.getConnection("jdbc:mariadb://127.0.0.1:3306/diary", "root", "java1234");
-	stmt1 = conn.prepareStatement(sql1);
-	rs1 = stmt1.executeQuery();
-	String mySession = null;
-	if(rs1.next());{
-		mySession = rs1.getString("mySession"); //rs1.getString(1): select from login 테이블로 부터 my_session값 불러옴	
-	}
-	if(mySession.equals("OFF")){
-		String errMsg = URLEncoder.encode("잘못된 접근입니다. 로그인 먼저 해주세요","utf-8");
+	// 0. 로그인(인증) 분기
+	String loginMember = (String)(session.getAttribute("loginMember"));
+	if(loginMember == null) {
+		String errMsg = URLEncoder.encode("잘못된 접근 입니다. 로그인 먼저 해주세요", "utf-8");
 		response.sendRedirect("/diary/loginForm.jsp?errMsg="+errMsg);
-		return; //코드진행을 종료시키는 문법 ex) 메서드 끝낼때 return사용
+		return;
 	}
+	
 	
 %>
 <%
 
+	Class.forName("org.mariadb.jdbc.Driver");
+	Connection conn = null;
+	conn = DriverManager.getConnection(
+			"jdbc:mariadb://127.0.0.1:3306/diary", "root", "java1234");
+	
+	// 달력 API
 	String targetYear = request.getParameter("targetYear");
 	String targetMonth = request.getParameter("targetMonth");
 	
 	Calendar target = Calendar.getInstance();
 	
-	if(targetYear != null || targetMonth != null){
-		target.set(Calendar.YEAR, Integer.parseInt(targetYear)); 
-		target.set(Calendar.MONTH, Integer.parseInt(targetMonth));
+	if(targetYear != null && targetMonth != null) {
+		target.set(Calendar.YEAR, Integer.parseInt(targetYear));
+		target.set(Calendar.MONTH, Integer.parseInt(targetMonth)); 
 	}
 	
-	target.set(Calendar.DATE,1);
+	target.set(Calendar.DATE, 1);
 	
-	//달력 타이틀로 출력할 변수
+	// 달력 타이틀로 출력할 변수
 	int tYear = target.get(Calendar.YEAR);
 	int tMonth = target.get(Calendar.MONTH);
 	
-	int yoNum = target.get(Calendar.DAY_OF_WEEK); 
-	System.out.println(yoNum); 	
-	int startBlank = yoNum - 1; 
-	int lastDate = target.getActualMaximum(Calendar.DATE); 
-	System.out.println(lastDate+"<--lastDate");
+	int yoNum = target.get(Calendar.DAY_OF_WEEK); // 일:1, 월:2, .....토:7
+	System.out.println(yoNum); 
+	// 시작공백의 개수 : 일요일 공백이 없고, 월요일은 1칸, 화요일은 2칸,....yoNum - 1이 공백의 개수
+	int startBlank = yoNum - 1;
+	int lastDate = target.getActualMaximum(Calendar.DATE); // target달의 마지막 날짜 반환
+	System.out.println(lastDate + " <-- lastDate");
 	int countDiv = startBlank + lastDate;
 	
-	//tYear와 tMonth에 해당되는 diary목록 추출
-	String sql2 = "select diary_date diaryDate, day(diary_date)day,feeling, left(title,5) title from diary where year(diary_date) = ? and month(diary_date) = ?"; //diary
+	// DB에서 tYear와 tMonth에 해당되는 diary목록 추출
+	String sql2 = "select diary_date diaryDate, day(diary_date) day, feeling, left(title,5) title from diary where year(diary_date)=? and month(diary_date)=?";
 	PreparedStatement stmt2 = null;
 	ResultSet rs2 = null;
 	stmt2 = conn.prepareStatement(sql2);
-	stmt2.setInt(1,tYear);
-	stmt2.setInt(2,tMonth+1);
+	stmt2.setInt(1, tYear);
+	stmt2.setInt(2, tMonth+1);
 	System.out.println(stmt2);
 	
-	rs2 = stmt2.executeQuery(); 
+	rs2 = stmt2.executeQuery();
 	
 %>
 
