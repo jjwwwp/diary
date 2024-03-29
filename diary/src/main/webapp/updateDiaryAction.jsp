@@ -2,6 +2,7 @@
 <%@ page import = "java.sql.*" %>
 <%@ page import="java.net.*"%>
 <%
+
 	String diaryDate = request.getParameter("diaryDate");
 	String title = request.getParameter("title");
 	String weather = request.getParameter("weather");

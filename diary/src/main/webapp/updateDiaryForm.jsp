@@ -2,6 +2,13 @@
 <%@ page import = "java.sql.*" %>
 <%@ page import="java.net.*"%>
 <% 
+	String loginMember = (String)(session.getAttribute("loginMember"));
+	if(loginMember == null) {
+	String errMsg = URLEncoder.encode("잘못된 접근 입니다. 로그인 먼저 해주세요", "utf-8");
+	response.sendRedirect("/diary/loginForm.jsp?errMsg="+errMsg);
+	return;
+	}
+
 	String diaryDate = request.getParameter("diaryDate");
 
 	String sql = "select diary_date, title,weather,content from diary where diary_date=?";
