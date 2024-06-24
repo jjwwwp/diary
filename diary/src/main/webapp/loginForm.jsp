@@ -43,51 +43,57 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title></title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>	
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Song+Myung&display=swap" rel="stylesheet">
-<style>
-	*{
-		font-family: "Song Myung", serif;
-	 }
-	 body{
-	 	text-align: center;
-	 	background-image: url('/diary/img/spring.jpg');
-		background-repeat:no-repeat;
-		background-size: cover; 
-		width: 100%;
-	 }
-</style>
+	<title>로그인</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>	
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Song+Myung&display=swap" rel="stylesheet">
+	<style>
+		* {
+			font-family: "Song Myung", serif;
+		}
+		body{
+		 	text-align:center;
+		 	background-image:url('/diary/img/spring.jpg');
+		 	background-size: cover;
+			background-repeat:no-repeat;
+			width: 100%;
+		}
+		.error-message {
+			color: red;
+			font-weight: bold;
+		}
+	</style>
 </head>
 <body class="bg-success-subtle">
-	<div class="container">
-		<div class="row">
-			<div class="col"></div>
-				<div class="mt-5 col-7 bg-white border shadow p-3 mb-5 bg-body-tertiary rounded">
-		
-	<h1>로그인</h1>
-	
-	<form method="post" action="/diary/loginAction.jsp">
-	<div>
-		<div>memberId:<div>
-		<input type="text" name="memberId">
-		<div>memberPw:</div>
-		<input type="password" name="memberPw">
-	</div><br>
-		<button type="submit" class="btn btn-primary">로그인</button>
-
-	 </form><br>
-	    <%
-			if(errMsg !=  null){
+<div class="container">
+<div class="row justify-content-center">
+	<div class="mt-5 col-7 bg-white border shadow p-3 mb-5 bg-body-tertiary rounded">
+		<h1>로그인</h1>
+		<form method="post" action="/diary/loginAction.jsp">
+			<div class="form-group">
+				<label for="memberId">ID:</label>
+				<input type="text" name="memberId" class="form-control" id="memberId" required>
+			</div>
+			<div class="form-group">
+				<label for="memberPw">Password:</label>
+				<input type="password" name="memberPw" class="form-control" id="memberPw" required>
+			</div>
+			<button type="submit" class="btn btn-primary">로그인</button>
+		</form>
+		<br>
+		<%
+			if(errMsg != null) {
 		%>
-			<%=errMsg%>
+			<div class="error-message">
+				<%= errMsg %>
+			</div>
 		<%
 			}
-		%>	
-		
-	
+		%>
+		</div>
+			</div>
+		</div>
 </body>
 </html>

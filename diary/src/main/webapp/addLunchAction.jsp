@@ -31,7 +31,7 @@
 	System.out.println(lunchDate);
 	System.out.println(menu);
 	
-	String sql2 = "insert into lunch(lunch_date,menu,create_date,update_date)VALUES(?,?,now(),now())";
+	String sql2 = "insert into lunch(lunch_date, menu, create_date, update_date)VALUES(?, ?, now(), now())";
 	PreparedStatement stmt2 = null;
 	ResultSet rs2 = null;
 	stmt2 = conn.prepareStatement(sql2);
@@ -45,7 +45,7 @@
 	}else{
 		System.out.println("입력실패");
 	}
-	response.sendRedirect("/diary/diary.jsp");
+	response.sendRedirect("/diary/statsLunch.jsp");
 %>
 <!DOCTYPE html>
 <html>

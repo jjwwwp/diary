@@ -122,6 +122,12 @@
 <div class="container">
 		<div class="row justify-content-center">
 			<div class="mt-5 col-7 bg-white border shadow p-3 mb-5 bg-body-tertiary rounded">
+				<div>
+					<a href="/diary/diary.jsp">메인화면/</a>
+					<a href="/diary/addDiaryForm.jsp">다이어리/</a>
+					<a href="/diary/lunchOne.jsp">점심투표/</a>
+					<a href="/diary/statsLunch.jsp">점심투표결과</a>
+				</div>
 				<h1 class="text-center">목록</h1>
 				
 					<table style="margin-left: auto; margin-right: auto;">

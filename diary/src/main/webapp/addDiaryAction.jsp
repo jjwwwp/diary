@@ -2,7 +2,8 @@
 <%@ page import = "java.sql.*" %>
 <%@page import = "java.net.*"%>
 <%
-	
+	request.setCharacterEncoding("utf-8");
+
 	String diaryDate = request.getParameter("diaryDate");
 	String feeling = request.getParameter("feeling");
 	String title = request.getParameter("title");
@@ -10,11 +11,12 @@
 	String content = request.getParameter("content");
 	
 	System.out.println(diaryDate);
+	System.out.println(feeling);
 	System.out.println(title);
 	System.out.println(weather);
 	System.out.println(content);
 	
-	String sql1 = "INSERT INTO `diary`.`diary` (`diary_date`,`feeling`, `title`, `weather`, `content`, `update_date`, `create_date`) VALUES (?, ?, ?, ?, ?, NOW(), NOW())";
+	String sql1 = "INSERT INTO diary(diary_date, feeling, title, weather, content, create_date, update_date)values(?, ?, ?, ?, ?, now(), now())";
 	Class.forName("org.mariadb.jdbc.Driver");
 	Connection conn = null;
 	PreparedStatement stmt1 = null;

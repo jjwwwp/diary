@@ -110,6 +110,12 @@ rs2 = stmt2.executeQuery();
 			color: #0000FF;
 		}
 		
+		 .calendar {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 20px;
+        }
 </style>
 </head>
 <body class="bg-success-subtle">
@@ -117,9 +123,10 @@ rs2 = stmt2.executeQuery();
 		<div class="row justify-content-center">
 				<div class="mt-5 col-7 bg-white border shadow p-3 mb-5 bg-body-tertiary rounded">
 				<div>
-					<a href="/diary/diary.jsp">다이어리/</a>
+					<a href="/diary/addDiaryForm.jsp">다이어리/</a>
 					<a href="/diary/diaryList.jsp">게시판/</a>
-					<a href="/diary/lunchOne.jsp">점심</a>
+					<a href="/diary/lunchOne.jsp">점심투표/</a>
+					<a href="/diary/statsLunch.jsp">점심투표결과</a>
 				</div>
 					<h1>일기장</h1>
 					
@@ -139,68 +146,75 @@ rs2 = stmt2.executeQuery();
 				<a href="./diary.jsp?targetYear=<%=tYear%>&targetMonth=<%=tMonth+1%>">다음달</a>
 			</div>	
 		</div>
+	</div>
 	
 		<hr>
 		
-	 	<div class="yo sun">SUN</div>
-        <div class="yo">MON</div>
-        <div class="yo">TUE</div>
-        <div class="yo">WED</div>
-        <div class="yo">THU</div>
-        <div class="yo">FRI</div>
-        <div class="yo sat">SAT</div>
-	
+		<div class="container">
+		<div class="calendar">
 		
-	<%
-		for(int i=1; i<=countDiv; i=i+1){
-			
-			if(i%7==1){
-	%>
-		<div class="cell sun">
-	<%
-			}else if(i%7==0){
-	%>	
-		<div class="cell sat">
-	<%
-		}else{
-	%>	
-		<div class="cell">
-	<% 			
-	}
-		if(i-startBlank > 0){
-	%> 
-		<%=i-startBlank%><br>
-	<% 			
-		//현재날짜(i-startBlank)의 일기가 rs2목록에 있는지 비교
-		while(rs2.next()){
-			//날짜에 일기가 존재한다
-			if(rs2.getInt("day")==(i-startBlank)){
-	%>
-			<div style="font-size: 12px;">
-				<span><%=rs2.getString("feeling")%></span>
-				<a href='/diary/diaryOne.jsp?diaryDate=<%=rs2.getString("diaryDate")%>'>
-					<%=rs2.getString("title")%>...
-				</a>
-			</div>
-	<% 
-					break;
+		 	<div class="yo sun">SUN</div>
+	        <div class="yo">MON</div>
+	        <div class="yo">TUE</div>
+	        <div class="yo">WED</div>
+	        <div class="yo">THU</div>
+	        <div class="yo">FRI</div>
+	        <div class="yo sat">SAT</div>
+	    
+		
+		<div>	
+		<%
+			for(int i=1; i<=countDiv; i=i+1){
+				
+				if(i%7==1){
+		%>
+			<div class="cell sun">
+		<%
+				}else if(i%7==0){
+		%>	
+			<div class="cell sat">
+		<%
+			}else{
+		%>	
+			<div class="cell">
+		<% 			
+		}
+			if(i-startBlank > 0){
+		%> 
+			<%=i-startBlank%><br>
+		<% 			
+			//현재날짜(i-startBlank)의 일기가 rs2목록에 있는지 비교
+			while(rs2.next()){
+				//날짜에 일기가 존재한다
+				if(rs2.getInt("day")==(i-startBlank)){
+		%>
+				<div style="font-size: 12px;">
+					<span><%=rs2.getString("feeling")%></span>
+					<a href='/diary/diaryOne.jsp?diaryDate=<%=rs2.getString("diaryDate")%>'>
+						<%=rs2.getString("title")%>...
+					</a>
+				</div>
+		<% 
+						break;
+					}
 				}
+				rs2.beforeFirst(); // ResultSet의 커스 위치를 처음으로...
+				//여기까지 진행되면 1일날의 데이터가 있는지 검색한것
+			}else{
+		%>
+			&nbsp; 
+		<%
 			}
-			rs2.beforeFirst(); // ResultSet의 커스 위치를 처음으로...
-			//여기까지 진행되면 1일날의 데이터가 있는지 검색한것
-		}else{
-	%>
-		&nbsp; 
-	<%
-		}
-	%>			
-		
+		%>			
+			
+			</div>
+		<%
+			}
+		%>		
 		</div>
-	<%
-		}
-	%>		
-
+		</div>
 	</div>	
+</div>	
 </div>
 	</div>
 </body>
